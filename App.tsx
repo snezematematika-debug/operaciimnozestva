@@ -1,3 +1,4 @@
+// ... (imports remain the same)
 import React, { useState, useEffect } from 'react';
 import { Book } from './components/Book';
 import { VennDiagram, getVennRegion } from './components/VennDiagram';
@@ -7,13 +8,11 @@ import { getMathHint } from './services/geminiService';
 import { CheckCircle, Undo2, Check, X } from 'lucide-react';
 
 export default function App() {
+  // ... (All state and helper functions remain exactly the same until Page9)
   // --- Global State ---
-  // Default to false ensures Welcome Screen (The Notebook Cover) is always first
   const [hasStarted, setHasStarted] = useState(false);
 
-  // --- MathJax Re-render Hook ---
   useEffect(() => {
-    // Only attempt MathJax if the window object exists (client-side)
     if (typeof window !== 'undefined' && (window as any).MathJax) {
       setTimeout(() => {
         try {
@@ -29,7 +28,6 @@ export default function App() {
     }
   });
 
-  // --- Helpers ---
   const normalizeSet = (val: string) => {
     const cleaned = val.replace(/[{}]/g, '').replace(/∅/g, '').trim();
     if (!cleaned) return ""; 
@@ -42,11 +40,9 @@ export default function App() {
       .join(',');
   };
 
-  // --- Problem 1 State ---
   const [p1Selection, setP1Selection] = useState<string | null>(null);
   const [p1Feedback, setP1Feedback] = useState<string>("");
 
-  // --- Problem 2 State ---
   const [p2IntersectionInput, setP2IntersectionInput] = useState("");
   const [p2UnionInput, setP2UnionInput] = useState("");
   const [p2Feedback, setP2Feedback] = useState<{type: 'idle'|'success'|'error', msg: string}>({type:'idle', msg:''});
@@ -57,51 +53,39 @@ export default function App() {
   );
   const [p2DragFeedback, setP2DragFeedback] = useState("");
 
-  // --- Problem 3 State ---
   const [p3Inputs, setP3Inputs] = useState({ a: '', b: '', c: '', d: '' });
   const [p3Feedback, setP3Feedback] = useState<{type: 'idle'|'success'|'error', msg: string}>({type:'idle', msg:''});
 
-  // --- Problem 4 State ---
   const [p4Inputs, setP4Inputs] = useState({ defA: '', defB: '', defC: '', a: '', b: '', c: '' });
   const [p4Feedback, setP4Feedback] = useState<{type: 'idle'|'success'|'error', msg: string}>({type:'idle', msg:''});
 
-  // --- Problem 5 State ---
   const [p5Inputs, setP5Inputs] = useState({ int: '', a: '', b: '' });
   const [p5Feedback, setP5Feedback] = useState<{type: 'idle'|'success'|'error', msg: string}>({type:'idle', msg:''});
 
-  // --- Problem 6 State ---
   const [p6SelectedLabel, setP6SelectedLabel] = useState<string | null>(null);
   const [p6Matches, setP6Matches] = useState<{[key: number]: string}>({});
   const [p6Feedback, setP6Feedback] = useState<{type: 'idle'|'success'|'error', msg: string}>({type:'idle', msg:''});
 
-  // --- Problem 7 State ---
   const [p7Answer, setP7Answer] = useState("");
   const [p7Feedback, setP7Feedback] = useState<{type: 'idle'|'success'|'error', msg: string}>({type:'idle', msg:''});
 
-  // --- Problem 8 State ---
   const [p8Answer, setP8Answer] = useState("");
   const [p8Feedback, setP8Feedback] = useState<{type: 'idle'|'success'|'error', msg: string}>({type:'idle', msg:''});
 
-  // --- Problem 9 State ---
   const [p9Selection, setP9Selection] = useState<string | null>(null);
   const [p9Feedback, setP9Feedback] = useState<string>("");
 
-  // --- Problem 10 State ---
   const [p10AnswerA, setP10AnswerA] = useState("");
   const [p10AnswerB, setP10AnswerB] = useState("");
   const [p10Feedback, setP10Feedback] = useState<{type: 'idle'|'success'|'error', msg: string}>({type:'idle', msg:''});
 
 
-  // --- Handlers ---
-
-  // P1
   const checkP1 = (val: string) => {
     setP1Selection(val);
     if (val === 'c') setP1Feedback("Точно! Пресекот се само заедничките делители.");
     else setP1Feedback("Неточно. Пробај пак.");
   };
 
-  // P2
   const checkP2 = async () => {
     setP2Loading(true);
     const userInt = normalizeSet(p2IntersectionInput);
@@ -149,7 +133,6 @@ export default function App() {
     else setP2DragFeedback("Имаш грешки. Провери каде припаѓаат елементите.");
   };
 
-  // P3
   const checkP3 = () => {
     const ansA = normalizeSet(p3Inputs.a);
     const ansB = normalizeSet(p3Inputs.b);
@@ -162,7 +145,6 @@ export default function App() {
     }
   };
 
-  // P4
   const checkP4 = () => {
     const defA = normalizeSet(p4Inputs.defA);
     const defB = normalizeSet(p4Inputs.defB);
@@ -171,18 +153,10 @@ export default function App() {
     const ansB = normalizeSet(p4Inputs.b);
     const ansC = normalizeSet(p4Inputs.c);
 
-    // Correct Answers
-    // A: 3 < x < 6 (Natural) -> {4, 5}
-    // B: x <= 8 (Natural) -> {1, 2, 3, 4, 5, 6, 7, 8}
-    // C: composite < 7 -> {4, 6}
     const isDefACorrect = defA === "4,5";
     const isDefBCorrect = defB === "1,2,3,4,5,6,7,8";
     const isDefCCorrect = defC === "4,6";
     
-    // Operations
-    // a. (A n B) \ A = {4,5} \ {4,5} = {}
-    // b. (A \ B) U C = {} U {4,6} = {4,6}
-    // c. (C \ B) n {} = {}
     const isOpACorrect = ansA === "";
     const isOpBCorrect = ansB === "4,6";
     const isOpCCorrect = ansC === "";
@@ -202,7 +176,6 @@ export default function App() {
     }
   };
 
-  // P5
   const checkP5 = () => {
     const ansInt = normalizeSet(p5Inputs.int);
     const ansA = normalizeSet(p5Inputs.a);
@@ -214,7 +187,6 @@ export default function App() {
     }
   };
 
-  // P6
   const getRegionItems = (region: string) => {
     return Object.entries(p2DragState).filter(([_, r]) => r === region).map(([num]) => parseInt(num));
   };
@@ -233,16 +205,11 @@ export default function App() {
   };
 
   const checkP6 = () => {
-    // Correct mapping based on the grid layout in Page6 component:
-    // 1: Union (Top Left)
-    // 2: Intersection (Top Right)
-    // 3: A \ B (Bottom Left)
-    // 4: B \ A (Bottom Right)
     const correctMap: {[key: number]: string} = {
-      1: labelsP6[2].text, // A U B
-      2: labelsP6[0].text, // A n B
-      3: labelsP6[3].text, // A \ B
-      4: labelsP6[1].text  // B \ A
+      1: labelsP6[2].text,
+      2: labelsP6[0].text,
+      3: labelsP6[3].text,
+      4: labelsP6[1].text
     };
 
     let allCorrect = true;
@@ -267,7 +234,6 @@ export default function App() {
     }
   };
 
-  // P7
   const checkP7 = () => {
     if (!p7Answer.trim()) {
         setP7Feedback({type: 'error', msg: "Внеси го твојот одговор пред да провериш."});
@@ -281,21 +247,12 @@ export default function App() {
     }
   }
 
-  // P8
   const checkP8 = () => {
     if (!p8Answer.trim()) {
         setP8Feedback({type: 'error', msg: "Внеси го твојот одговор пред да провериш."});
         return;
     }
     const val = parseInt(p8Answer);
-    // Logic: 
-    // Total = 75
-    // Photos (P) = 42
-    // Both (P n T) = 36
-    // Formula: |P U T| = |P| + |T| - |P n T|
-    // 75 = 42 + |T| - 36
-    // 75 = 6 + |T|
-    // |T| = 69
     if (val === 69) {
         setP8Feedback({type: 'success', msg: "Точно! 69 луѓе праќаат текстуални пораки."});
     } else {
@@ -303,14 +260,12 @@ export default function App() {
     }
   }
 
-  // P9
   const checkP9 = (val: string) => {
     setP9Selection(val);
     if (val === 'd') setP9Feedback("Точно! Елементот 4 е во А и С, но не во В. Затоа не е во пресекот на А и В.");
     else setP9Feedback("Неточно. Разгледај го дијаграмот повторно.");
   };
 
-  // P10
   const checkP10 = () => {
     if (!p10AnswerA.trim() || !p10AnswerB.trim()) {
         setP10Feedback({type: 'error', msg: "Внеси ги двата одговори пред да провериш."});
@@ -318,25 +273,6 @@ export default function App() {
     }
     const valA = parseInt(p10AnswerA);
     const valB = parseInt(p10AnswerB);
-
-    /* Logic:
-       Total = 32
-       T = 20, I = 22, S = 18
-       T n I n S = 5
-       T n I = 12  => (T n I) only = 12 - 5 = 7
-       I n S = 11  => (I n S) only = 11 - 5 = 6
-       (T n S) only = 5 (given)
-       
-       We need |Only I|.
-       |I| = (Only I) + (T n I only) + (I n S only) + (T n I n S)
-       22 = (Only I) + 7 + 6 + 5
-       22 = (Only I) + 18
-       Only I = 4
-
-       We need Exactly Two Apps:
-       = (T n I only) + (I n S only) + (T n S only)
-       = 7 + 6 + 5 = 18
-    */
 
     if (valA === 4 && valB === 18) {
         setP10Feedback({type: 'success', msg: "Браво! Ги реши двете барања точно."});
@@ -349,12 +285,9 @@ export default function App() {
     }
   }
 
-  // --- SHARED COMPONENTS ---
-  // Standardized button style
   const checkButtonStyle = "bg-indigo-600 text-white text-sm font-bold px-6 py-2 rounded-full shadow-md hover:bg-indigo-700 transition flex items-center gap-2";
 
-  // --- PAGE COMPONENTS ---
-
+  // ... (Page 1-8 components remain the same)
   const Page1 = (
     <div className="flex flex-col h-full">
       <div className="border-b-2 border-slate-300 pb-2 mb-4">
@@ -423,7 +356,6 @@ export default function App() {
          </div>
          
          <div className="p-4 overflow-y-auto flex-1 space-y-5">
-           {/* Part A: Tabular */}
            <div className="flex flex-col gap-3 text-base">
              <div className="flex items-center gap-2">
                <span className="w-20 text-right font-bold text-slate-700">а.</span>
@@ -461,7 +393,6 @@ export default function App() {
              )}
            </div>
 
-           {/* Part B: Drag and Drop Diagram */}
            <div className="border-t border-slate-300 pt-3 mt-2">
              <div className="flex gap-2 mb-2 flex-col">
                 <div className="flex gap-2">
@@ -471,7 +402,6 @@ export default function App() {
                 <span className="text-slate-500 text-xs ml-5">(Повлечи ги броевите во соодветната област)</span>
              </div>
              
-             {/* Draggables Bank */}
              <div className="bg-slate-100 p-2 rounded-lg border border-slate-200 mb-2 min-h-[50px] flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-bold text-slate-500 uppercase">Елементи:</span>
                 {initialDraggables.filter(n => p2DragState[n] === 'bank').map(n => (
@@ -489,7 +419,6 @@ export default function App() {
                 )}
              </div>
 
-             {/* Drop Zone */}
              <div 
                className="relative border-2 border-dashed border-slate-300 rounded-xl p-2 bg-slate-50/50"
                onDragOver={handleDragOver}
@@ -508,7 +437,6 @@ export default function App() {
                 </div>
              </div>
 
-             {/* Controls */}
              <div className="flex justify-center gap-2 mt-2">
                <button onClick={checkP2Drag} className={checkButtonStyle}>
                   Провери Распоред <CheckCircle size={14}/>
@@ -996,12 +924,12 @@ export default function App() {
 
   const Page9 = (
     <div className="flex flex-col h-full">
-      <div className="border-b-2 border-slate-300 pb-2 mb-4">
+      <div className="border-b-2 border-slate-300 pb-2 mb-4 shrink-0">
          <h2 className="text-lg font-bold text-slate-700 uppercase">Задача 9</h2>
          <span className="text-xs text-slate-500">Анализа на Венов дијаграм</span>
       </div>
       <div className="bg-white/60 rounded-lg border border-slate-300 shadow-sm overflow-hidden flex-1 flex flex-col">
-        <div className="bg-indigo-50 p-4 border-b border-indigo-100 flex gap-3 flex-col">
+        <div className="bg-indigo-50 p-4 border-b border-indigo-100 flex gap-3 flex-col shrink-0">
           <div className="flex gap-3">
              <div className="bg-slate-800 text-white rounded-full w-6 h-6 flex items-center justify-center shrink-0 font-bold text-sm">9</div>
              <div className="font-medium text-base text-slate-800">
@@ -1010,82 +938,86 @@ export default function App() {
           </div>
         </div>
         
-        {/* Venn Diagram Container */}
-        <div className="flex-1 flex items-center justify-center p-4 min-h-[200px]">
-           <svg viewBox="0 0 300 220" className="w-full max-w-[300px] select-none font-sans font-bold text-lg">
-              {/* Set A (Top) - Orange */}
-              <circle cx="150" cy="80" r="60" fill="none" stroke="#f97316" strokeWidth="3" />
-              {/* Set B (Left) - Red */}
-              <circle cx="110" cy="150" r="60" fill="none" stroke="#dc2626" strokeWidth="3" />
-              {/* Set C (Right) - Blue */}
-              <circle cx="190" cy="150" r="60" fill="none" stroke="#0ea5e9" strokeWidth="3" />
+        {/* Scrollable container for Diagram and Options */}
+        <div className="flex-1 overflow-y-auto flex flex-col">
+            {/* Venn Diagram Container */}
+            <div className="flex items-center justify-center p-4 min-h-[180px] shrink-0">
+               <svg viewBox="0 0 300 220" className="w-full max-w-[260px] select-none font-sans font-bold text-lg">
+                  {/* Set A (Top) - Orange */}
+                  <circle cx="150" cy="80" r="60" fill="none" stroke="#f97316" strokeWidth="3" />
+                  {/* Set B (Left) - Red */}
+                  <circle cx="110" cy="150" r="60" fill="none" stroke="#dc2626" strokeWidth="3" />
+                  {/* Set C (Right) - Blue */}
+                  <circle cx="190" cy="150" r="60" fill="none" stroke="#0ea5e9" strokeWidth="3" />
 
-              {/* Updated Labels: Positioned outside the circles clearly */}
-              {/* A centered above top circle */}
-              <text x="150" y="15" textAnchor="middle" fill="#f97316" fontSize="18" fontWeight="bold">A</text>
-              {/* B to the left of left circle */}
-              <text x="30" y="160" textAnchor="middle" fill="#dc2626" fontSize="18" fontWeight="bold">B</text>
-              {/* C to the right of right circle */}
-              <text x="270" y="160" textAnchor="middle" fill="#0ea5e9" fontSize="18" fontWeight="bold">C</text>
+                  {/* Updated Labels: Positioned outside the circles clearly */}
+                  {/* A centered above top circle */}
+                  <text x="150" y="15" textAnchor="middle" fill="#f97316" fontSize="18" fontWeight="bold">A</text>
+                  {/* B to the left of left circle */}
+                  <text x="30" y="160" textAnchor="middle" fill="#dc2626" fontSize="18" fontWeight="bold">B</text>
+                  {/* C to the right of right circle */}
+                  <text x="270" y="160" textAnchor="middle" fill="#0ea5e9" fontSize="18" fontWeight="bold">C</text>
 
-              {/* Elements */}
-              {/* 1 in A only */}
-              <text x="150" y="50" textAnchor="middle" fill="#334155">1</text>
-              {/* 6 in B only */}
-              <text x="90" y="160" textAnchor="middle" fill="#334155">6</text>
-              {/* 7 in C only */}
-              <text x="210" y="160" textAnchor="middle" fill="#334155">7</text>
-              
-              {/* 2 in A n B */}
-              <text x="115" y="105" textAnchor="middle" fill="#334155">2</text>
-              {/* 4 in A n C */}
-              <text x="185" y="105" textAnchor="middle" fill="#334155">4</text>
-              {/* 5 in B n C */}
-              <text x="150" y="180" textAnchor="middle" fill="#334155">5</text>
-              
-              {/* 3 in A n B n C */}
-              <text x="150" y="135" textAnchor="middle" fill="#334155">3</text>
-           </svg>
-        </div>
+                  {/* Elements */}
+                  {/* 1 in A only */}
+                  <text x="150" y="50" textAnchor="middle" fill="#334155">1</text>
+                  {/* 6 in B only */}
+                  <text x="90" y="160" textAnchor="middle" fill="#334155">6</text>
+                  {/* 7 in C only */}
+                  <text x="210" y="160" textAnchor="middle" fill="#334155">7</text>
+                  
+                  {/* 2 in A n B */}
+                  <text x="115" y="105" textAnchor="middle" fill="#334155">2</text>
+                  {/* 4 in A n C */}
+                  <text x="185" y="105" textAnchor="middle" fill="#334155">4</text>
+                  {/* 5 in B n C */}
+                  <text x="150" y="180" textAnchor="middle" fill="#334155">5</text>
+                  
+                  {/* 3 in A n B n C */}
+                  <text x="150" y="135" textAnchor="middle" fill="#334155">3</text>
+               </svg>
+            </div>
 
-        {/* Options */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200">
-           <div className="grid grid-cols-2 gap-3">
-             {[
-               {id: 'a', val: '\\( A \\cap C \\)'},
-               {id: 'b', val: '\\( C \\cup B \\)'},
-               {id: 'c', val: '\\( B \\cup A \\)'},
-               {id: 'd', val: '\\( A \\cap B \\)'}
-             ].map(opt => (
-               <button
-                 key={opt.id}
-                 onClick={() => checkP9(opt.id)}
-                 className={`flex items-center gap-2 p-3 rounded-lg border-2 transition-all ${
-                    p9Selection === opt.id 
-                    ? (opt.id === 'd' ? 'bg-green-50 border-green-500 text-green-800' : 'bg-red-50 border-red-300 text-red-800')
-                    : 'bg-white border-slate-200 hover:border-indigo-400 hover:bg-indigo-50'
-                 }`}
-               >
-                 <span className="font-bold uppercase text-slate-500">{opt.id})</span>
-                 <span className="font-bold text-lg">{opt.val}</span>
-                 {p9Selection === opt.id && (
-                    <span className="ml-auto">
-                        {opt.id === 'd' ? <Check size={20}/> : <X size={20}/>}
-                    </span>
-                 )}
-               </button>
-             ))}
-           </div>
-           {p9Feedback && (
-             <div className={`mt-3 text-center text-sm font-bold py-2 px-4 rounded ${p9Selection === 'd' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {p9Feedback}
-             </div>
-           )}
+            {/* Options */}
+            <div className="p-4 bg-slate-50 border-t border-slate-200 mt-auto">
+               <div className="grid grid-cols-2 gap-3">
+                 {[
+                   {id: 'a', val: '\\( A \\cap C \\)'},
+                   {id: 'b', val: '\\( C \\cup B \\)'},
+                   {id: 'c', val: '\\( B \\cup A \\)'},
+                   {id: 'd', val: '\\( A \\cap B \\)'}
+                 ].map(opt => (
+                   <button
+                     key={opt.id}
+                     onClick={() => checkP9(opt.id)}
+                     className={`flex items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                        p9Selection === opt.id 
+                        ? (opt.id === 'd' ? 'bg-green-50 border-green-500 text-green-800' : 'bg-red-50 border-red-300 text-red-800')
+                        : 'bg-white border-slate-200 hover:border-indigo-400 hover:bg-indigo-50'
+                     }`}
+                   >
+                     <span className="font-bold uppercase text-slate-500">{opt.id})</span>
+                     <span className="font-bold text-lg">{opt.val}</span>
+                     {p9Selection === opt.id && (
+                        <span className="ml-auto">
+                            {opt.id === 'd' ? <Check size={20}/> : <X size={20}/>}
+                        </span>
+                     )}
+                   </button>
+                 ))}
+               </div>
+               {p9Feedback && (
+                 <div className={`mt-3 text-center text-sm font-bold py-2 px-4 rounded ${p9Selection === 'd' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {p9Feedback}
+                 </div>
+               )}
+            </div>
         </div>
       </div>
     </div>
   );
 
+  // ... (Page 10 and return statement remain the same)
   const Page10 = (
     <div className="flex flex-col h-full">
       <div className="border-b-2 border-slate-300 pb-2 mb-4">
@@ -1157,12 +1089,10 @@ export default function App() {
     </div>
   );
 
-  // --- INTRO SCREEN (HOME PAGE) ---
   if (!hasStarted) {
     return <WelcomeScreen onStart={() => setHasStarted(true)} />;
   }
 
-  // --- MAIN APP (BOOK) ---
   return (
     <div className="min-h-screen bg-[#e6d5b8] py-4 px-4 font-sans text-slate-900 flex flex-col items-center">
       <div className="max-w-4xl w-full flex items-center justify-between mb-4 px-4">
@@ -1176,7 +1106,7 @@ export default function App() {
           <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Работна Тетратка</h1>
           <p className="text-slate-600 text-sm">Тема: Множества</p>
         </div>
-        <div className="w-24"></div> {/* Spacer for centering */}
+        <div className="w-24"></div> 
       </div>
 
       <Book pages={[Page1, Page2, Page3, Page4, Page5, Page6, Page7, Page8, Page9, Page10]} />
