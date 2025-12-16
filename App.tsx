@@ -782,22 +782,22 @@ export default function App() {
          <span className="text-xs text-slate-500">Поврзување</span>
       </div>
       <div className="bg-white/60 rounded-lg border border-slate-300 shadow-sm flex-1 flex flex-col overflow-hidden">
-          <div className="bg-indigo-50 p-4 border-b border-indigo-100 flex gap-3">
+          {/* Header Instruction - Fixed Height */}
+          <div className="bg-indigo-50 p-3 border-b border-indigo-100 flex gap-3 shrink-0">
              <div className="bg-slate-800 text-white rounded-full w-6 h-6 flex items-center justify-center shrink-0 font-bold text-sm">6</div>
-             <div className="text-base">
-                <p className="font-medium">Поврзи ги обоените области на дијаграмите со точните операции со множества.</p>
-                <p className="text-slate-500 text-xs mt-1">(Кликни на операцијата горе, па потоа на соодветниот дијаграм)</p>
+             <div className="text-sm">
+                <p className="font-medium leading-tight">Поврзи ги областите со операциите.</p>
+                <p className="text-slate-500 text-[10px] mt-1">(Кликни на операцијата, па на дијаграмот)</p>
              </div>
           </div>
           
-          <div className="p-4 flex-1 flex flex-col justify-center overflow-y-auto">
-            {/* Operations Toolbar */}
-            <div className="flex justify-center flex-wrap gap-2 mb-6 bg-slate-100 p-2 rounded-xl border border-slate-200">
+          {/* Toolbar for Buttons - Sticky/Fixed below header */}
+          <div className="bg-slate-50 p-2 border-b border-slate-200 flex justify-center flex-wrap gap-2 shrink-0 z-10 shadow-sm">
               {labelsP6.map(l => (
                 <button 
                   key={l.id} 
                   onClick={() => setP6SelectedLabel(l.text)}
-                  className={`px-3 py-2 border rounded-lg text-sm transition-all shadow-sm ${
+                  className={`px-3 py-1.5 border rounded-lg text-sm transition-all shadow-sm flex items-center justify-center min-w-[60px] ${
                     p6SelectedLabel === l.text 
                       ? 'bg-indigo-600 text-white shadow-md transform scale-105 ring-2 ring-indigo-300' 
                       : Object.values(p6Matches).includes(l.text) 
@@ -808,10 +808,12 @@ export default function App() {
                   {l.text}
                 </button>
               ))}
-            </div>
-
+          </div>
+          
+          {/* Scrollable Content for Diagrams */}
+          <div className="p-4 flex-1 flex flex-col justify-start overflow-y-auto">
             {/* Diagrams Grid */}
-            <div className="grid grid-cols-2 gap-4 px-4">
+            <div className="grid grid-cols-2 gap-4 pb-4">
                {/* 1. Union (Top Left) */}
                <div 
                  className={`relative border-2 rounded-xl p-2 flex flex-col items-center justify-center transition-all cursor-pointer bg-white ${
@@ -865,7 +867,7 @@ export default function App() {
                </div>
             </div>
 
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-center mt-2 shrink-0">
                <button 
                  onClick={checkP6}
                  className={checkButtonStyle}
@@ -1013,15 +1015,18 @@ export default function App() {
            <svg viewBox="0 0 300 220" className="w-full max-w-[300px] select-none font-sans font-bold text-lg">
               {/* Set A (Top) - Orange */}
               <circle cx="150" cy="80" r="60" fill="none" stroke="#f97316" strokeWidth="3" />
-              <text x="75" y="60" fill="#f97316" fontSize="16" fontWeight="bold">A</text>
-              
               {/* Set B (Left) - Red */}
               <circle cx="110" cy="150" r="60" fill="none" stroke="#dc2626" strokeWidth="3" />
-              <text x="35" y="160" fill="#dc2626" fontSize="16" fontWeight="bold">B</text>
-
               {/* Set C (Right) - Blue */}
               <circle cx="190" cy="150" r="60" fill="none" stroke="#0ea5e9" strokeWidth="3" />
-              <text x="265" y="160" fill="#0ea5e9" fontSize="16" fontWeight="bold">C</text>
+
+              {/* Updated Labels: Positioned outside the circles clearly */}
+              {/* A centered above top circle */}
+              <text x="150" y="15" textAnchor="middle" fill="#f97316" fontSize="18" fontWeight="bold">A</text>
+              {/* B to the left of left circle */}
+              <text x="30" y="160" textAnchor="middle" fill="#dc2626" fontSize="18" fontWeight="bold">B</text>
+              {/* C to the right of right circle */}
+              <text x="270" y="160" textAnchor="middle" fill="#0ea5e9" fontSize="18" fontWeight="bold">C</text>
 
               {/* Elements */}
               {/* 1 in A only */}

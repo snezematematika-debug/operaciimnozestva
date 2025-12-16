@@ -57,7 +57,7 @@ export const VennDiagram: React.FC<VennDiagramProps> = ({
 
   return (
     <div className={`relative select-none ${className}`} style={{ width: '100%', maxWidth: width, aspectRatio: '3/2' }}>
-      <svg width="100%" height="100%" viewBox="0 0 300 200" className="overflow-visible">
+      <svg width="100%" height="100%" viewBox="0 0 300 200" className="overflow-visible font-handwriting">
         <defs>
           <mask id="mask-right-cut">
             <rect x="0" y="0" width="300" height="200" fill="white" />
@@ -112,6 +112,10 @@ export const VennDiagram: React.FC<VennDiagramProps> = ({
           className={onRegionClick ? "cursor-pointer hover:stroke-indigo-600 transition-colors" : ""}
           onClick={() => onRegionClick && onRegionClick('right')}
         />
+
+        {/* LABELS - Scalable SVG Text positioned in corners */}
+        <text x="20" y="30" fontSize="24" fontWeight="bold" fill="#334155" className="pointer-events-none">A</text>
+        <text x="280" y="30" fontSize="24" fontWeight="bold" fill="#334155" textAnchor="end" className="pointer-events-none">B</text>
       </svg>
 
       {/* Elements Rendering */}
@@ -141,10 +145,6 @@ export const VennDiagram: React.FC<VennDiagramProps> = ({
           </span>
         ))}
       </div>
-      
-      {/* Labels */}
-      <div className="absolute top-[5%] left-[15%] font-bold text-slate-700 font-handwriting text-lg">A</div>
-      <div className="absolute top-[5%] right-[15%] font-bold text-slate-700 font-handwriting text-lg">B</div>
     </div>
   );
 };
