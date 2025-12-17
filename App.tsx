@@ -1165,24 +1165,25 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#e6d5b8] py-4 px-4 font-sans text-slate-900 flex flex-col items-center">
-      <div className="max-w-4xl w-full flex items-center justify-between mb-4 px-4">
+    <div className="min-h-screen bg-[#5C8065] py-4 px-4 font-sans text-slate-100 flex flex-col items-center relative"
+         style={{ background: 'radial-gradient(circle at center, #729b7f 0%, #4a6b55 100%)' }}>
+      <div className="max-w-4xl w-full flex items-center justify-between mb-4 px-4 relative z-10">
         <button 
            onClick={() => setHasStarted(false)}
-           className="text-slate-500 hover:text-indigo-600 transition-colors flex items-center gap-1 text-sm font-bold"
+           className="text-slate-300 hover:text-white transition-colors flex items-center gap-1 text-sm font-bold"
         >
            <Undo2 size={18} /> Назад кон почеток
         </button>
         <div className="text-center">
-          <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">Работна Тетратка</h1>
-          <p className="text-slate-600 text-sm">Тема: Множества</p>
+          <h1 className="text-2xl font-extrabold text-slate-50 tracking-tight">Работна Тетратка</h1>
+          <p className="text-slate-300 text-sm">Тема: Множества</p>
         </div>
         <div className="w-24"></div> 
       </div>
 
       <Book pages={[Page1, Page2, Page3, Page4, Page5, Page6, Page7, Page8, Page9, Page10]} />
       
-      <div className="text-center text-slate-500 text-xs mt-8">
+      <div className="text-center text-slate-400 text-xs mt-8 relative z-10">
         Снежана Златковска © 2025 | Изработено со React и Tailwind
       </div>
     </div>
